@@ -9,16 +9,16 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
-#define M1_PWM 4
-#define M1_DIR 7
-#define M2_PWM 5
-#define M2_DIR 8
-#define M3_PWM 9
-#define M3_DIR 6
-#define M4_PWM 13
-#define M4_DIR 10
-#define M5_PWM 11
-#define M5_DIR A0
+#define M0_DIR 4
+#define M0_EN 7
+#define M1_DIR 5
+#define M1_EN 8
+#define M2_DIR 9
+#define M2_EN 6
+#define M3_DIR 13
+#define M3_EN 10
+#define M4_DIR 11
+#define M4_EN A0
 #define LED_PWM 12
 #define PRESS_1 A1
 #define PRESS_2 A2
@@ -27,7 +27,8 @@
 #define ENCODER_BUTTON A5
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-
+#define EXTEND 1
+#define CONTRACT 0
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
 SoftwareSerial BTSerial(BT_RX, BT_TX);
@@ -51,8 +52,8 @@ int page = 0;
 int key = 0;
 
 int mode;
-int motor_dir_array[5] = {M1_DIR, M2_DIR, M3_DIR, M4_DIR, M5_DIR};
-int motor_pwm_array[5] = {M1_PWM, M2_PWM, M3_PWM, M4_PWM, M5_PWM};
+int motor_en_array[5] = {M0_EN, M1_EN, M2_EN, M3_EN, M4_EN};
+int motor_dir_array[5] = {M0_DIR, M1_DIR, M2_DIR, M3_DIR, M4_DIR};
 
 String command; //debuging용
 
