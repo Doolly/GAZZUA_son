@@ -9,17 +9,17 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
-#define M1_PWM 7//// 둘이 바꾸고
-#define M1_DIR 4////
-#define M2_PWM 5//////// 이렇게 둘이
-#define M2_DIR 8////////
-#define M3_PWM 6
-#define M3_DIR 9
+#define M1_PWM 4
+#define M1_DIR 7
+#define M2_PWM 5
+#define M2_DIR 8
+#define M3_PWM 9
+#define M3_DIR 6
 #define M4_PWM 13
 #define M4_DIR 10
-#define M5_PWM 11 //얘네둘 바꾸기
-#define M5_DIR AO //
-#define LED_PWM   //이것도 vcc꼽은거 바꾸고
+#define M5_PWM 11
+#define M5_DIR A0
+#define LED_PWM 12
 #define PRESS_1 A1
 #define PRESS_2 A2
 #define BT_RX A3
@@ -32,8 +32,13 @@
 Adafruit_SSD1306 display;
 SoftwareSerial BTSerial(BT_RX, BT_TX);
 /*------ Functions ------*/
-void updateEncoder();
-void OLED_init();
+void EncoderInit();
+void UpdateEncoder();
+void OLEDInit();
+void MotorInit();
+void MotorTest();
+void ButtonTest();
+int DebounceRead(int button);
 void Change_Value_in_Serial();
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
@@ -43,13 +48,15 @@ int lastMSB = 0;
 int lastLSB = 0;
 
 int mode;
+int motor_dir_array[5] = {M1_DIR, M2_DIR, M3_DIR, M4_DIR, M5_DIR};
+int motor_pwm_array[5] = {M1_PWM, M2_PWM, M3_PWM, M4_PWM, M5_PWM};
 
 String command; //debuging용
 
 void setup() {
-  Encoder_init();
-  OLED_init ();
-
+  EncoderInit();
+  OLEDInit ();
+  MotorInit();
   BTSerial.begin(9600);
 
 
@@ -63,7 +70,19 @@ void loop() {
   //  delay(500);
   //  display.clearDisplay();
   //    delay(500);
+
+
+
+  // Convert Variable1 into a string, so we can change the text alignment to the right:
+  // It can be also used to add or remove decimal numbers.
+  char string[10];  // Create a character array of 10 characters
+  // Convert float to a string:
+  dtostrf(encoderValue, 3, 0, string);  // (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
+  display.setCursor(0, 10);  // (x,y)
+  display.println(encoderValue);  // Text or value to print
   display.display();
+  delay(2);
+  display.clearDisplay();
 
   while (mode == 3) {
   }

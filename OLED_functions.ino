@@ -1,4 +1,4 @@
-void OLED_init () {
+void OLEDInit () {
   delay(100);
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);  // Initialize display with the I2C address
   display.clearDisplay();  // Clear the buffer
