@@ -55,16 +55,20 @@ int mode;
 int motor_en_array[5] = {M0_EN, M1_EN, M2_EN, M3_EN, M4_EN};
 int motor_dir_array[5] = {M0_DIR, M1_DIR, M2_DIR, M3_DIR, M4_DIR};
 
-String command; //debuging용
+int pressure_val = 0;
 
 void setup() {
   EncoderInit();
   OLEDInit ();
   MotorInit();
   BTSerial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
+  Change_Value_in_Serial();
+  Serial.println(pressure_val);
+  
   changeMode();
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
@@ -100,7 +104,6 @@ void loop() {
   if (DebounceRead(ENCODER_BUTTON) == 0) {
     display.fillRect(0, box_p, 70, 18, WHITE);
   }
-
 
 
   while (mode == 3) {
