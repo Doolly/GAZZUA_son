@@ -39,6 +39,7 @@ void MotorInit();
 void MotorTest();
 void ButtonTest();
 int DebounceRead(int button);
+int CheckExit();
 void Change_Value_in_Serial();
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
@@ -50,7 +51,7 @@ int box_p = 0;
 int page = 0;
 int key = 0;
 
-int mode;
+int mode = -1;
 int motor_dir_array[5] = {M1_DIR, M2_DIR, M3_DIR, M4_DIR, M5_DIR};
 int motor_pwm_array[5] = {M1_PWM, M2_PWM, M3_PWM, M4_PWM, M5_PWM};
 
@@ -96,17 +97,112 @@ void loop() {
   delay(2);
   display.clearDisplay();
 
-  if (DebounceRead(ENCODER_BUTTON) == 0) {
+  if (DebounceRead(ENCODER_BUTTON) == LOW) {
     display.fillRect(0, box_p, 70, 18, WHITE);
+    delay(100);
+    if (key == 0) {
+      mode = 0;
+    }
+    else if ((key == 1) || (key == -7)) {
+      mode = 1;
+    }
+    else if ((key == 2) || (key == -6)) {
+      mode = 2;
+    }
+    else if ((key == 3) || (key == -5)) {
+      mode = 3;
+    }
+    else if ((key == 4) || (key == -4)) {
+      mode = 4;
+    }
+    else if ((key == 5) || (key == -3)) {
+      mode = 5;
+    }
+    else if ((key == 6) || (key == -2)) {
+      mode = 6;
+    }
+    else if ((key == 7) || (key == -1)) {
+      mode = 7;
+    }
   }
-
-
-
-  while (mode == 3) {
+  while (mode == 0) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("grasp mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
   }
   while (mode == 1) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("point mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
   }
   while (mode == 2) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("V pos mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
   }
-
+  while (mode == 3) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("OK mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
+  }
+  while (mode == 4) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("LED mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
+  }
+  while (mode == 5) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("BT mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
+  }
+  while (mode == 6) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("motion mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
+  }
+  while (mode == 7) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("setset mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = -1;
+    }
+  }
 }
