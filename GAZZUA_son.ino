@@ -137,6 +137,7 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("grasp mode");
     display.display();
+    Grasp();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;

@@ -34,3 +34,6 @@ void MotorCtrl (int moter_num, int range, int pos_in) {
   last_pos = last_pos + pos_to_move;
 }
 
+void Grasp() {
+  MotorCtrl(0, 500, pressure_val);
+}
