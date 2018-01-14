@@ -1,3 +1,8 @@
+/*
+y는 10 부터 됨
+x엔 12자리 
+x 0~127 y 10~60  폰트크기가 10
+*/
 void OLEDInit () {
   delay(100);
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);  // Initialize display with the I2C address

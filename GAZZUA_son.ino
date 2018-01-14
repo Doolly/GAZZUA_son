@@ -58,31 +58,34 @@ void setup() {
   OLEDInit ();
   MotorInit();
   BTSerial.begin(9600);
-
-
 }
 
 void loop() {
-  //  display.drawRect(79, 0, 49, 27, WHITE);  // Draw rectangle (x,y,width,height,color) 우측 하단부터 그림
-  //  display.display();
-  //  //display.fillRect(79, 0, 49, 27, WHITE);
-  //  display.display();
-  //  delay(500);
-  //  display.clearDisplay();
-  //    delay(500);
-
+  display.drawRect(0, 0, 80, 17, WHITE);  // Draw rectangle (x,y,width,height,color) 우측 하단부터 그림
+  display.setCursor(5, 12);  // (x,y)
+  display.println("mode_a");
+   display.setCursor(0, 28);  // (x,y)
+  display.println("mode_b");
+   display.setCursor(0, 44);  // (x,y)
+  display.println("mode_c");
+   display.setCursor(0, 60);  // (x,y)
+  display.println("mode_d");
+//   display.setCursor(0, 50);  // (x,y)
+//  display.println("mode_e");
+//  display.setCursor(0, 50);  // (x,y)
+//  display.println("mode_f");
+  //display.fillRect(79, 0, 49, 27, WHITE);
 
 
   // Convert Variable1 into a string, so we can change the text alignment to the right:
   // It can be also used to add or remove decimal numbers.
   char string[10];  // Create a character array of 10 characters
-  // Convert float to a string:
-  dtostrf(encoderValue, 3, 0, string);  // (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
-  display.setCursor(0, 10);  // (x,y)
-  display.println(encoderValue);  // Text or value to print
-  display.display();
-  delay(2);
-  display.clearDisplay();
+  dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
+    display.setCursor(90, 10);  // (x,y)
+    display.println(encoderValue);  // Text or value to print
+    display.display();
+    delay(2);
+    display.clearDisplay();
 
   while (mode == 3) {
   }
