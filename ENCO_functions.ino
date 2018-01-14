@@ -16,30 +16,30 @@ void updateEncoder() {
   if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000)
     encoderValue --;
   lastEncoded = encoded; //store this value for next time
-  
+
 }
 
-void changeMode(){
-  key = (encoderValue/10)%8;
-  switch( key%4){
-    case -3 : box_p = 16;break;
-    case -2 : box_p = 32;break;
-    case -1 : box_p = 48;break;
-    case 0 : box_p = 0;break;
-    case 1 : box_p = 16;break;
-    case 2 : box_p = 32;break;
-    case 3 : box_p = 48;break; 
+void changeMode() {
+  key = (encoderValue / 10) % 8;
+  switch ( key % 4) {
+    case -3 : box_p = 16; break;
+    case -2 : box_p = 32; break;
+    case -1 : box_p = 48; break;
+    case 0 : box_p = 0; break;
+    case 1 : box_p = 16; break;
+    case 2 : box_p = 32; break;
+    case 3 : box_p = 48; break;
   }
-  if(key > 3){
+  if (key > 3) {
     page = 1;
   }
-  else if((key < 4 ) && (key>-1)){
+  else if ((key < 4 ) && (key > -1)) {
     page = 0;
   }
-  else if( (key < 0) && (key >= -4)){
+  else if ( (key < 0) && (key >= -4)) {
     page = 1;
   }
-  else{
+  else {
     page = 0;
   }
 }
