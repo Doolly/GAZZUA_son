@@ -25,18 +25,18 @@ void MotorTest() {
     Serial.println("LOW");
     cnt = 0;
   }
-  analogWrite(M1_PWM, 1023);
+  digitalWrite(M1_PWM, HIGH);
   analogWrite(M2_PWM, 1023);
   analogWrite(M3_PWM, 1023);
   analogWrite(M4_PWM, 1023);
   analogWrite(M5_PWM, 1023);
-  delay(800);
-  analogWrite(M1_PWM, 0);
+  delay(2000);
+  digitalWrite(M1_PWM, LOW);
   analogWrite(M2_PWM, 0);
   analogWrite(M3_PWM, 0);
   analogWrite(M4_PWM, 0);
   analogWrite(M5_PWM, 0);
-  delay(800);
+  delay(1000);
   cnt++;
 }
 

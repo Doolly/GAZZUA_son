@@ -46,6 +46,9 @@ volatile long encoderValue = 0;
 long lastencoderValue = 0;
 int lastMSB = 0;
 int lastLSB = 0;
+int box_p = 0;
+int page = 0;
+int key = 0;
 
 int mode;
 int motor_dir_array[5] = {M1_DIR, M2_DIR, M3_DIR, M4_DIR, M5_DIR};
@@ -61,42 +64,44 @@ void setup() {
 }
 
 void loop() {
-  display.drawRect(0, 0, 64, 18, WHITE);  // Draw rectangle (x,y,width,height,color) 우측 하단부터 그림
-  display.setCursor(5, 12);  // (x,y)
-  display.println("grasp");
-  display.setCursor(0, 28);  // (x,y)
-  display.println("point");
-  display.setCursor(0, 44);  // (x,y)
-  display.println("V pos");
-  display.setCursor(0, 60);  // (x,y)
-  display.println("O K");
-// next page
-//  display.drawRect(0, 0, 80, 18, WHITE);  // Draw rectangle (x,y,width,height,color) 우측 하단부터 그림
-//  display.setCursor(5, 12);  // (x,y)
-//  display.println("LED");
-//  display.setCursor(0, 28);  // (x,y)
-//  display.println("BT");
-//  display.setCursor(0, 44);  // (x,y)
-//  display.println("motion");
-//  display.setCursor(0, 60);  // (x,y)
-//  display.println("setset");
- 
+  changeMode();
+  display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
+  if (page == 0) {
+    display.setCursor(5, 10);  // (x,y)
+    display.println("grasp");
+    display.setCursor(5, 27);  // (x,y)
+    display.println("point");
+    display.setCursor(5, 44);  // (x,y)
+    display.println("V pos");
+    display.setCursor(5, 60);  // (x,y)
+    display.println("O K");
+  }
+  else {
+    display.setCursor(5, 10);  // (x,y)
+    display.println("LED");
+    display.setCursor(5, 27);  // (x,y)
+    display.println("BT");
+    display.setCursor(5, 44);  // (x,y)
+    display.println("motion");
+    display.setCursor(5, 60);  // (x,y)
+    display.println("setset");
+  }
   // Convert Variable1 into a string, so we can change the text alignment to the right:
   // It can be also used to add or remove decimal numbers.
   char string[10];  // Create a character array of 10 characters
   dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
   display.setCursor(90, 10);  // (x,y)
-  display.println(encoderValue);  // Text or value to print
+  display.println(key);  // Text or value to print
   display.display();
   delay(2);
   display.clearDisplay();
 
-if (DebounceRead(ENCODER_BUTTON)==0){
-  display.fillRect(0, 0, 64, 18, WHITE);
+  if (DebounceRead(ENCODER_BUTTON) == 0) {
+    display.fillRect(0, box_p, 70, 18, WHITE);
   }
 
 
-  
+
   while (mode == 3) {
   }
   while (mode == 1) {
