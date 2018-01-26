@@ -1,5 +1,6 @@
 /*------ Headers to Include ------*/
 #include <SoftwareSerial.h>
+#include <Servo.h>
 #include <Adafruit_GFX.h>  // Include core graphics library for the display
 #include <Adafruit_SSD1306.h>  // Include Adafruit_SSD1306 library to drive the display
 #include <Fonts/FreeMonoBold12pt7b.h>  // Add a custom font
@@ -9,29 +10,23 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
-#define M0_DIR 4
-#define M0_EN 7
-#define M1_DIR 5
-#define M1_EN 8
-#define M2_DIR 9
-#define M2_EN 6
-#define M3_DIR 13
-#define M3_EN 10
-#define M4_DIR 11
-#define M4_EN A0
+#define M_THUMB 4
+#define M_INDEX 7
+#define M_OTHER 5
 #define LED_PWM 12
 #define PRESS_1 A1
-//#define PRESS_2 A2
 #define BT_RX A3
 #define BT_TX A4
 #define ENCODER_BUTTON A5
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-#define EXTEND 1
-#define CONTRACT 0
+#define array_size 8
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
 SoftwareSerial BTSerial(BT_RX, BT_TX);
+Servo Index_M; 
+Servo Other_M; 
+Servo Thumb_M; 
 /*------ Functions ------*/
 void EncoderInit();
 void UpdateEncoder();
@@ -55,12 +50,18 @@ int box_p = 0;
 int page = 0;
 int key = 0;
 
-int motor_en_array[5] = {M0_EN, M1_EN, M2_EN, M3_EN, M4_EN};
-int motor_dir_array[5] = {M0_DIR, M1_DIR, M2_DIR, M3_DIR, M4_DIR};
-enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, BT, MOTION, SETSET};
+const int outThumbMax = 180;
+const int outThumbMin = 85;
+const int outIndexMax = 180;
+const int outIndexMin = 50;
+const int outOtherMax = ;
+const int outOtherMin = ;
+
+enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, BT, MOTION, SETSET};   //grasp , picking, point, 랜덤가위바위보 , LED , calibration       and  현재 상황에서 엔코더 돌리면 락걸리게
 enum MODE mode = MENU;
 
 int pressure_val = 0;
+int sensor_array[array_size] = {0,};
 
 void setup() {
   EncoderInit();
@@ -72,11 +73,9 @@ void setup() {
 }
 
 void loop() {
-  //Change_Value_in_Serial();
-  digitalWrite(LED_PWM, LOW);
-  //MotorInit();
-  
+  Change_Value_in_Serial();
   changeMode();
+  
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
     display.setCursor(5, 10);  // (x,y)
@@ -142,7 +141,6 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("grasp mode");
     display.display();
-
 
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);

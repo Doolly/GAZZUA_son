@@ -38,28 +38,12 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
 
 }
 
-void Grasp(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,2000, pressure_val);
-  MotorCtrl(3,2000, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
-}
+int GetSenSor() {
+  for (int i = 0 ; i < array_size; i++){
+    sensor_array[i] = analogRead(PRESS_1);
+    
+  }
 
-void Point(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,2000, pressure_val);
-  MotorCtrl(3,100, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
-}
-
-void V_Pos(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,100, pressure_val);
-  MotorCtrl(3,100, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
 }
 
 
