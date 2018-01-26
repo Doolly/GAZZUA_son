@@ -143,6 +143,7 @@ void loop() {
     display.println("grasp mode");
     display.display();
 
+
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
 
