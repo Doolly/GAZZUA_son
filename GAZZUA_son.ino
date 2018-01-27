@@ -75,6 +75,8 @@ void setup() {
 void loop() {
   Change_Value_in_Serial();
   changeMode();
+  pressure_val = analogRead(PRESS_1);
+  Serial.println(pressure_val);
   
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
@@ -227,7 +229,7 @@ void loop() {
     }
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, outThumbMin, outThumbMax);
-    Thumb_M.write()
+    Thumb_M.write(170);
   }
   while (mode == INDEX) {
     display.clearDisplay();
