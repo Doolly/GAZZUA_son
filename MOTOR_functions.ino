@@ -1,3 +1,4 @@
+/*
 void MotorInit() {
   for (int i = 0; i < 5; i++) {
     pinMode(motor_en_array[i], OUTPUT);
@@ -8,5 +9,4 @@ void MotorInit() {
   }
 }
 
-
-
+*/

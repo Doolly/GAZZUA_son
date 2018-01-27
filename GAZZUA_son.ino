@@ -10,10 +10,11 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
-#define M_THUMB 4
-#define M_INDEX 7
-#define M_OTHER 5
-#define LED_PWM 12
+#define M_THUMB 11
+#define M_INDEX 9
+#define M_OTHER 10
+#define LED_PWM 5
+#define LED_EN 4
 #define PRESS_1 A1
 #define BT_RX A3
 #define BT_TX A4
@@ -31,8 +32,7 @@ Servo Thumb_M;
 void EncoderInit();
 void UpdateEncoder();
 void OLEDInit();
-void MotorInit();
-void MotorTest();
+
 void ButtonTest();
 int DebounceRead(int button);
 int CheckExit();
@@ -54,10 +54,10 @@ const int outThumbMax = 180;
 const int outThumbMin = 85;
 const int outIndexMax = 180;
 const int outIndexMin = 50;
-const int outOtherMax = ;
-const int outOtherMin = ;
+const int outOtherMax = 170;
+const int outOtherMin = 110;
 
-enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, BT, MOTION, SETSET};   //grasp , picking, point, 랜덤가위바위보 , LED , calibration       and  현재 상황에서 엔코더 돌리면 락걸리게
+enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, THUMB, INDEX, OTHER};   //grasp , picking, point, 랜덤가위바위보 , LED ,개별제어 , calibration       and  현재 상황에서 엔코더 돌리면 락걸리게
 enum MODE mode = MENU;
 
 int pressure_val = 0;
@@ -66,7 +66,7 @@ int sensor_array[array_size] = {0,};
 void setup() {
   EncoderInit();
   OLEDInit ();
-  MotorInit();
+
   BTSerial.begin(9600);
   Serial.begin(9600);
   pinMode(LED_PWM, OUTPUT);
@@ -93,9 +93,9 @@ void loop() {
     display.setCursor(5, 27);  // (x,y)
     display.println("BT");
     display.setCursor(5, 44);  // (x,y)
-    display.println("motion");
+    display.println("INDEX");
     display.setCursor(5, 60);  // (x,y)
-    display.println("setset");
+    display.println("OTHER");
   }
   // Convert Variable1 into a string, so we can change the text alignment to the right:
   // It can be also used to add or remove decimal numbers.
@@ -126,13 +126,13 @@ void loop() {
       mode = LED;
     }
     else if ((key == 5) || (key == -3)) {
-      mode = BT;
+      mode = THUMB;
     }
     else if ((key == 6) || (key == -2)) {
-      mode = MOTION;
+      mode = INDEX;
     }
     else if ((key == 7) || (key == -1)) {
-      mode = SETSET;
+      mode = OTHER;
     }
   }
 
@@ -145,7 +145,7 @@ void loop() {
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
 
-    Grasp();
+   
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -161,8 +161,7 @@ void loop() {
 
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
-
-    Point();
+    
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -177,7 +176,7 @@ void loop() {
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
 
-    V_Pos();
+  
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -217,30 +216,33 @@ void loop() {
       mode = MENU;
     }
   }
-  while (mode == BT) {
+  while (mode == THUMB) {
     display.clearDisplay();
     display.setCursor(5, 10);  // (x,y)
-    display.println("BT mode");
+    display.println("THUMB mode");
+    display.display();
+    if (DebounceRead(ENCODER_BUTTON) == LOW) {
+      delay(100);
+      mode = MENU;
+    }
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, outThumbMin, outThumbMax);
+    Thumb_M.write()
+  }
+  while (mode == INDEX) {
+    display.clearDisplay();
+    display.setCursor(5, 10);  // (x,y)
+    display.println("INDEX mode");
     display.display();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
     }
   }
-  while (mode == MOTION) {
+  while (mode == OTHER) {
     display.clearDisplay();
     display.setCursor(5, 10);  // (x,y)
-    display.println("motion mode");
-    display.display();
-    if (DebounceRead(ENCODER_BUTTON) == LOW) {
-      delay(100);
-      mode = MENU;
-    }
-  }
-  while (mode == SETSET) {
-    display.clearDisplay();
-    display.setCursor(5, 10);  // (x,y)
-    display.println("setset mode");
+    display.println("OTHER mode");
     display.display();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
