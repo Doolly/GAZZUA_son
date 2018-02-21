@@ -10,24 +10,22 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
-#define M_THUMB 11
-#define M_INDEX 9
-#define M_OTHER 10
-#define LED_PWM 5
+#define M_THUMB 5
+#define M_INDEX 6
+#define M_MIDDLE 10
+#define M_OTHER 13
 #define LED_EN 4
 #define PRESS_1 A1
-#define BT_RX A3
-#define BT_TX A4
 #define ENCODER_BUTTON A5
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
 #define array_size 8
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
-SoftwareSerial BTSerial(BT_RX, BT_TX);
-Servo Index_M; 
-Servo Other_M; 
-Servo Thumb_M; 
+Servo Thumb_M;
+Servo Index_M;
+Servo Middle_M;
+Servo Other_M;
 /*------ Functions ------*/
 void EncoderInit();
 void UpdateEncoder();
@@ -57,7 +55,7 @@ const int outIndexMin = 50;
 const int outOtherMax = 170;
 const int outOtherMin = 110;
 
-enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, THUMB, INDEX, OTHER};   //grasp , picking, point, 랜덤가위바위보 , LED ,개별제어 , calibration       and  현재 상황에서 엔코더 돌리면 락걸리게
+enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, THUMB, INDEX, OTHER};   //grasp(5) ,grasp(3) , picking,  LED  랜덤가위바위보(grasp(5),pick,nutral, 뻐큐)
 enum MODE mode = MENU;
 
 int pressure_val = 0;
@@ -67,7 +65,12 @@ void setup() {
   EncoderInit();
   OLEDInit ();
 
-  BTSerial.begin(9600);
+
+  Thumb_M.attach(M_THUMB);
+  Index_M.attach(M_INDEX);
+  Middle_M.attach(M_MIDDLE);
+  Other_M.attach(M_OTHER);
+
   Serial.begin(9600);
   pinMode(LED_PWM, OUTPUT);
 }
@@ -77,7 +80,7 @@ void loop() {
   changeMode();
   pressure_val = analogRead(PRESS_1);
   Serial.println(pressure_val);
-  
+
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
     display.setCursor(5, 10);  // (x,y)
@@ -147,7 +150,7 @@ void loop() {
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
 
-   
+
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -163,7 +166,7 @@ void loop() {
 
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
-    
+
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -178,7 +181,7 @@ void loop() {
     pressure_val = analogRead(PRESS_1);
     pressure_val = map(pressure_val, 0, 650, 0, 1000);
 
-  
+
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -211,7 +214,7 @@ void loop() {
       digitalWrite(LED_PWM, HIGH);
     }
     else
-    digitalWrite(LED_PWM, LOW);
+      digitalWrite(LED_PWM, LOW);
 
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
