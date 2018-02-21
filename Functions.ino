@@ -1,12 +1,3 @@
-unsigned long current_time; //global variable
-unsigned long previous_time; //global variable
-void MillisDelay( int delay_time ) {
-  current_time = millis();
-  previous_time = current_time;
-  while (current_time - previous_time < delay_time) {
-    current_time = millis();
-  }
-}
 
 int A_variable;
 int B_variable;
@@ -37,29 +28,37 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
   }
 
 }
+ 
+int button_state;
+int last_button_state = 0; //pull down circit
+unsigned long last_debounce_time = 0;
+unsigned long debounce_delay = 50;
 
-void Grasp(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,2000, pressure_val);
-  MotorCtrl(3,2000, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
+int DebounceRead(int button) {
+  int reading = digitalRead(button);
+
+  if (reading != last_button_state)
+    last_debounce_time = millis();
+
+  if ((millis() - last_debounce_time) > debounce_delay) {
+    if (reading != button_state) {
+      button_state = reading;
+
+      if (button_state == 1)
+        return 1;
+      else
+        return 0;
+    }
+  }
+  last_button_state = reading;
 }
 
-void Point(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,2000, pressure_val);
-  MotorCtrl(3,100, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
+
+void timerIsr() {
+  encoder->service();
 }
 
-void V_Pos(){
-  MotorCtrl(0,2000, pressure_val);
-  MotorCtrl(1,2000, pressure_val);
-  MotorCtrl(2,100, pressure_val);
-  MotorCtrl(3,100, pressure_val);
-  MotorCtrl(4,2000, pressure_val);
-}
-
-
+int GetPressureVal () {
+  
+  
+  }
