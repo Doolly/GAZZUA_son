@@ -21,7 +21,8 @@
 
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-#define array_size 8
+#define WINDOW_SIZE 8
+#define NUMBER_OF_MODES 8
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
 Servo Thumb_M;
@@ -59,15 +60,16 @@ const int MiddleMin = 50;
 const int OtherMax = 170;
 const int OtherMin = 110;
 
-enum MODE {MENU = -1, GRASP, THREE, PICK, LED, RCP, LOVE ,FUCK, OTHER};
-enum MODE mode = MENU;
+String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love", "Fxxx", "other"};
+enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE ,FUCK, OTHER};
+enum MODE mode = GRASP;
 
 int pressure_val = 0;
 int pressure_max;
 int pressure_min;
-int sensor_array[array_size] = {0,};
+int sensor_array[WINDOW_SIZE] = {0,};
 int encoder_gain = 30;
-int number_of_modes = 8;
+
 void setup() {
   EncoderInit();
   OLEDInit ();
@@ -78,60 +80,21 @@ void setup() {
 }
 
 void loop() {
-
-
   Change_Value_in_Serial();
   ChangeMode();
 
   display.clearDisplay();
   display.drawRect(0, rect_x_pos, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
-  if (page == 0) {
-    display.setCursor(5, 10);  
-    display.println("grasp");
-    display.setCursor(5, 27);  
-    display.println("three");
-    display.setCursor(5, 44);  
-    display.println("pick");
-    display.setCursor(5, 60);  
-    display.println("LED");
-  }
-  else {
-    display.setCursor(5, 10); 
-    display.println("rcp");
-    display.setCursor(5, 27);  
-    display.println("love");
-    display.setCursor(5, 44);  
-    display.println("Fxxx");
-    display.setCursor(5, 60); 
-    display.println("other");
-  }
+  display.setCursor(5, 10);  
+  display.println(mode_s[page*4]);
+  display.setCursor(5, 27);  
+  display.println(mode_s[page*4 + 1]);
+  display.setCursor(5, 44);  
+  display.println(mode_s[page*4 + 2]);
+  display.setCursor(5, 60);  
+  display.println(mode_s[page*4 + 3]);
+  
   display.display();
-  
-  
-    if (key == 0) {
-      mode = GRASP;
-    }
-    else if ((key == 1) || (key == -7)) {
-      mode = THREE;
-    }
-    else if ((key == 2) || (key == -6)) {
-      mode = PICK;
-    }
-    else if ((key == 3) || (key == -5)) {
-      mode = LED;
-    }
-    else if ((key == 4) || (key == -4)) {
-      mode = RCP;
-    }
-    else if ((key == 5) || (key == -3)) {
-      mode = LOVE;
-    }
-    else if ((key == 6) || (key == -2)) {
-      mode = FUCK;
-    }
-    else if ((key == 7) || (key == -1)) {
-      mode = OTHER;
-    }
   }
 
 

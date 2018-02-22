@@ -16,7 +16,9 @@ void UpdateEncoder() {
   if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000)
     encoderValue --;
   lastEncoded = encoded; //store this value for next time
-  
+
+  if(encoderValue < 0)
+    encoderValue = 999;
 }
 void PrintValue(int variable){
   // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
@@ -29,27 +31,24 @@ void PrintValue(int variable){
   display.clearDisplay();
 }
 void ChangeMode() {
-  key = (encoderValue / encoder_gain) % number_of_modes;
-  switch ( key % 4) {
-    case -3 : rect_x_pos = 16; break;
-    case -2 : rect_x_pos = 32; break;
-    case -1 : rect_x_pos = 48; break;
-    case 0 : rect_x_pos = 0; break;
-    case 1 : rect_x_pos = 16; break;
-    case 2 : rect_x_pos = 32; break;
-    case 3 : rect_x_pos = 48; break;
-  }
+  key = (encoderValue * encoder_gain / 100) % NUMBER_OF_MODES;
+  switch (key) {
+    case 0 : mode = GRASP;break;
+    case 1 : mode = THREE;break;
+    case 2 : mode = PICK;break;
+    case 3 : mode = LED;break;
+    case 4 : mode = RCP;break;
+    case 5 : mode = LOVE;break;
+    case 6 : mode = FUCK;break;
+    case 7 : mode = OTHER;break;
+    }
   if (key > 3) {
     page = 1;
-  }
-  else if ((key < 4 ) && (key > -1)) {
-    page = 0;
-  }
-  else if ( (key < 0) && (key >= -4)) {
-    page = 1;
+    rect_x_pos = (key-4)*16;
   }
   else {
     page = 0;
+    rect_x_pos = key*16;
   }
 }
 
