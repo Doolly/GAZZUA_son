@@ -31,8 +31,9 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
 
 void SerialMonitor() {
   Serial.print(pressure_val_raw);
-  //Serial.print(" ");
- // Serial.println(pressure_val);
+  Serial.print(" ");
+  Serial.println(pressure_val);
+  
 
   //Serial.print("pressure_val = " + String(pressure_val) + "\n");
   //Serial.print("pressure_max = " + String(pressure_max) + "\n");
@@ -71,5 +72,6 @@ void GetSensor() {
   }
   pressure_val = sum / WINDOW_SIZE;
 }
+
 
 

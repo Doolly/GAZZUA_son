@@ -21,8 +21,8 @@
 
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-#define WINDOW_SIZE 10
-#define NUMBER_OF_MODES 8
+#define WINDOW_SIZE 50
+#define NUMBER_OF_MODES 10
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
 Servo Thumb_M;
@@ -60,7 +60,7 @@ const int OtherMax = 170;
 const int OtherMin = 110;
 
 String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love", "Fxxx", "other"};
-enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE ,FUCK, OTHER};
+enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE , FUCK, OTHER};
 enum MODE mode = GRASP;
 
 int pressure_val_raw = 0;
@@ -70,14 +70,16 @@ int pressure_min;
 int sensor_array[WINDOW_SIZE] = {0,};
 int encoder_gain = 3;  //encoder sensitivity
 
+int a;
+
 void setup() {
   pinMode(LED_EN, OUTPUT);
-  Serial.begin(9600);
+  Serial.begin(115200);
   EncoderInit();
   OLEDInit ();
   MotorInit();
 
- // Calibration ();
+  // Calibration ();
 }
 
 void loop() {
@@ -85,7 +87,6 @@ void loop() {
   SerialMonitor();
   ChangeMode();
   MainDisplay();
-  //GetSensor();
-  pressure_val_raw = analogRead(PRESS_SEN);
+  GetSensor();
  
 }
