@@ -185,6 +185,8 @@ void loop() {
   }
   while (mode == BT) {
     display.clearDisplay();
+
+              
     display.setCursor(5, 10);  // (x,y)
     display.println("BT mode");
     display.display();
