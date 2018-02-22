@@ -36,6 +36,7 @@ void MainDisplay() {
   display.display();
   display.clearDisplay();
 }
+
 void CenterDisplay(String ment) {
   display.clearDisplay();
   display.setCursor(5, 32);
@@ -53,3 +54,4 @@ void DisplayValue(int variable) {
   delay(2);
   display.clearDisplay();
 }
+

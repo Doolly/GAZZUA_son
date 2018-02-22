@@ -14,8 +14,8 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
       part1 = command.substring(0, command.indexOf(" "));
       part2 = command.substring(command.indexOf(" ") + 1);
 
-      if (part1.equalsIgnoreCase("pressure_val"))
-        pressure_val = part2.toInt();
+      if (part1.equalsIgnoreCase("mm"))
+        mm = part2.toInt();
 
       else if (part1.equalsIgnoreCase("B_variable"))
         B_variable = part2.toInt();
@@ -29,15 +29,19 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
 
 }
 
-void SerialMonitor() {
-  Serial.print(pressure_val_raw);
-  Serial.print(" ");
-  Serial.println(pressure_val);
-  
+void SerialMonitor(int how) {
 
-  //Serial.print("pressure_val = " + String(pressure_val) + "\n");
-  //Serial.print("pressure_max = " + String(pressure_max) + "\n");
-  //Serial.print("pressure_min = " + String(pressure_min) + "\n");
+  if  (how == 0) { //for plot
+    Serial.print(pressure_val_raw);
+    Serial.print(" ");
+    Serial.println(pressure_val);
+  }
+  else if (how == 1) { //for value print
+    Serial.print("pressure_val = " + String(pressure_val) + "\n");
+    Serial.print("pressure_max = " + String(pressure_max) + "\n");
+    Serial.print("pressure_min = " + String(pressure_min) + "\n");
+    Serial.print("\n");
+  }
 }
 
 void Calibration () {

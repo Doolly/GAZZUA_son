@@ -21,8 +21,9 @@
 
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-#define WINDOW_SIZE 50
+#define WINDOW_SIZE 30
 #define NUMBER_OF_MODES 10
+
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
 Servo Thumb_M;
@@ -40,15 +41,13 @@ int DebounceRead(int button);
 void CenterDisplay(String ment);
 void DisplayValue(int variable);
 void Change_Value_in_Serial();
-void SerialMonitor();
+void SerialMonitor(int how);
 void Calibration ();
+
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
-
-int rect_x_pos = 0;
-int page = 0;
-int key = 0;
+int encoder_gain = 4;  //encoder sensitivity
 
 const int ThumbMax = 100;
 const int ThumbMin = 10;
@@ -68,25 +67,28 @@ int pressure_val = 0;
 int pressure_max;
 int pressure_min;
 int sensor_array[WINDOW_SIZE] = {0,};
-int encoder_gain = 3;  //encoder sensitivity
 
-int a;
+int rect_x_pos = 0;
+int page = 0;
+int key = 0;
+
+int mm; // monitoring method
 
 void setup() {
   pinMode(LED_EN, OUTPUT);
-  Serial.begin(115200);
+  Serial.begin(9600);
   EncoderInit();
   OLEDInit ();
   MotorInit();
 
-  // Calibration ();
+ // Calibration ();
 }
 
 void loop() {
   Change_Value_in_Serial();
-  SerialMonitor();
+  SerialMonitor(mm);
   ChangeMode();
   MainDisplay();
   GetSensor();
- 
+
 }
