@@ -18,10 +18,10 @@ void OLEDInit () {
   display.setFont(&FreeMono9pt7b);  // Set a custom font
   display.setTextSize(0);  // Set text size. We are using a custom font so you should always use the text size of 0
 
-  display.setCursor(23, 32);  // (x,y)
+  display.setCursor(5, 32);  // (x,y)
   display.println("GAZZUA_son");  // Text or value to print
   display.display();  // Print everything we set previously
-  delay(500);
+  delay(2000);
   display.clearDisplay();
 }
 
