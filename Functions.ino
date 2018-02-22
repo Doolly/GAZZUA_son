@@ -28,17 +28,17 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
   }
 
 }
+
 void SerialMonitor() {
   Serial.print("pressure_val = " + String(pressure_val) + "\n");
-  Serial.print("pressure_val = " + String(pressure_val) + "\n");
-  Serial.print("pressure_val = " + String(pressure_val) + "\n");
-  Serial.print("pressure_val = " + String(pressure_val) + "\n");
+  Serial.print("pressure_max = " + String(pressure_max) + "\n");
+  Serial.print("pressure_min = " + String(pressure_min) + "\n");
 }
 
 void Calibration () {
   display.clearDisplay();
   display.setCursor(5, 10);  // (x,y)
-  display.println("LED mode");
+  display.println("Calibration mode");
   display.display();
 
   pressure_max = GetSensor();

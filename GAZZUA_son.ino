@@ -42,9 +42,6 @@ void SerialMonitor();
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
-long lastencoderValue = 0;
-int lastMSB = 0;
-int lastLSB = 0;
 
 int rect_x_pos = 0;
 int page = 0;
@@ -68,6 +65,7 @@ int pressure_min;
 int sensor_array[array_size] = {0,};
 int encoder_gain = 30;
 int number_of_modes = 8;
+
 void setup() {
   EncoderInit();
   OLEDInit ();
