@@ -16,7 +16,7 @@ void UpdateEncoder() {
   if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000)
     encoderValue --;
   lastEncoded = encoded; //store this value for next time
-
+  
 }
 void PrintValue(int variable){
   // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
@@ -29,7 +29,7 @@ void PrintValue(int variable){
   display.clearDisplay();
 }
 void ChangeMode() {
-  key = (encoderValue / 10) % 8;
+  key = (encoderValue / encoder_gain) % number_of_modes;
   switch ( key % 4) {
     case -3 : rect_x_pos = 16; break;
     case -2 : rect_x_pos = 32; break;

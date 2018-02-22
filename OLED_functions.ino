@@ -21,5 +21,7 @@ void OLEDInit () {
   display.setCursor(23, 32);  // (x,y)
   display.println("GAZZUA_son");  // Text or value to print
   display.display();  // Print everything we set previously
+  delay(500);
+  display.clearDisplay();
 }
 

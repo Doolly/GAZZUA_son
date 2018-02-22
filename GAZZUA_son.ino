@@ -66,7 +66,8 @@ int pressure_val = 0;
 int pressure_max;
 int pressure_min;
 int sensor_array[array_size] = {0,};
-
+int encoder_gain = 30;
+int number_of_modes = 8;
 void setup() {
   EncoderInit();
   OLEDInit ();
@@ -81,9 +82,8 @@ void loop() {
 
   Change_Value_in_Serial();
   ChangeMode();
-  pressure_val = analogRead(PRESS_SEN);
-  Serial.println(pressure_val);
 
+  display.clearDisplay();
   display.drawRect(0, rect_x_pos, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
     display.setCursor(5, 10);  
@@ -105,7 +105,7 @@ void loop() {
     display.setCursor(5, 60); 
     display.println("other");
   }
-  
+  display.display();
   
   
     if (key == 0) {
