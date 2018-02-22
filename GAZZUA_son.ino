@@ -21,7 +21,7 @@
 #define M4_EN A0
 #define LED_PWM 12
 #define PRESS_1 A1
-#define PRESS_2 A2
+//#define PRESS_2 A2
 #define BT_RX A3
 #define BT_TX A4
 #define ENCODER_BUTTON A5
@@ -42,6 +42,9 @@ void ButtonTest();
 int DebounceRead(int button);
 int CheckExit();
 void Change_Value_in_Serial();
+void Grasp();
+void Point();
+void V_Pos();
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
@@ -65,11 +68,13 @@ void setup() {
   MotorInit();
   BTSerial.begin(9600);
   Serial.begin(9600);
+  pinMode(LED_PWM, OUTPUT);
 }
 
 void loop() {
-  Change_Value_in_Serial();
-  Serial.println(pressure_val);
+  //Change_Value_in_Serial();
+  digitalWrite(LED_PWM, LOW);
+  //MotorInit();
   
   changeMode();
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
@@ -137,17 +142,29 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("grasp mode");
     display.display();
+
+
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, 0, 1000);
+
     Grasp();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
     }
+
+
   }
   while (mode == POINT) {
     display.clearDisplay();
     display.setCursor(5, 10);  // (x,y)
     display.println("point mode");
     display.display();
+
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, 0, 1000);
+
+    Point();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -158,6 +175,11 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("V pos mode");
     display.display();
+
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, 0, 1000);
+
+    V_Pos();
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -168,6 +190,10 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("OK mode");
     display.display();
+
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, 0, 1000);
+
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;
@@ -178,6 +204,16 @@ void loop() {
     display.setCursor(5, 10);  // (x,y)
     display.println("LED mode");
     display.display();
+
+    pressure_val = analogRead(PRESS_1);
+    pressure_val = map(pressure_val, 0, 650, 0, 1000);
+
+    if (pressure_val > 100) {
+      digitalWrite(LED_PWM, HIGH);
+    }
+    else
+    digitalWrite(LED_PWM, LOW);
+
     if (DebounceRead(ENCODER_BUTTON) == LOW) {
       delay(100);
       mode = MENU;

@@ -37,3 +37,29 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
   }
 
 }
+
+void Grasp(){
+  MotorCtrl(0,2000, pressure_val);
+  MotorCtrl(1,2000, pressure_val);
+  MotorCtrl(2,2000, pressure_val);
+  MotorCtrl(3,2000, pressure_val);
+  MotorCtrl(4,2000, pressure_val);
+}
+
+void Point(){
+  MotorCtrl(0,2000, pressure_val);
+  MotorCtrl(1,2000, pressure_val);
+  MotorCtrl(2,2000, pressure_val);
+  MotorCtrl(3,100, pressure_val);
+  MotorCtrl(4,2000, pressure_val);
+}
+
+void V_Pos(){
+  MotorCtrl(0,2000, pressure_val);
+  MotorCtrl(1,2000, pressure_val);
+  MotorCtrl(2,100, pressure_val);
+  MotorCtrl(3,100, pressure_val);
+  MotorCtrl(4,2000, pressure_val);
+}
+
+
