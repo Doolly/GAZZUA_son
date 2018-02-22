@@ -4,13 +4,13 @@ void MotorInit() {
   Middle_M.attach(M_MIDDLE);
   Other_M.attach(M_OTHER);
 
-  Thumb_M.write(outThumbMax);
-  Index_M.write(outIndexbMax);
-  Middle_M.write(outMiddlebMax);
-  Other_M.write(outOtherMax);
+  Thumb_M.write(ThumbMax);
+  Index_M.write(IndexMax);
+  Middle_M.write(MiddleMax);
+  Other_M.write(OtherMax);
 }
 
-void MotorCtrl (String mode){
+void MotorCtrl (int mode){
   switch(mode){
     case GRASP: break;
     case THREE: break;

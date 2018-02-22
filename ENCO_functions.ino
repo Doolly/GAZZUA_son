@@ -2,11 +2,11 @@ void EncoderInit() {
   pinMode(ENCODER_1, INPUT_PULLUP);
   pinMode(ENCODER_2, INPUT_PULLUP);
   pinMode(ENCODER_BUTTON, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(ENCODER_1), updateEncoder, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(ENCODER_2), updateEncoder, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(ENCODER_1), UpdateEncoder, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(ENCODER_2), UpdateEncoder, CHANGE);
 }
 
-void updateEncoder() {
+void UpdateEncoder() {
   int MSB = digitalRead(ENCODER_1); //MSB = most significant bit
   int LSB = digitalRead(ENCODER_2); //LSB = least significant bit
   int encoded = (MSB << 1) | LSB; //converting the 2 pin value to single number
@@ -18,17 +18,26 @@ void updateEncoder() {
   lastEncoded = encoded; //store this value for next time
 
 }
-
-void changeMode() {
+void PrintValue(int variable){
+  // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
+  char string[10];  // Create a character array of 10 characters
+  dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
+  display.setCursor(90, 10);  // (x,y)
+  display.println(variable);  // Text or value to print (key)
+  display.display();
+  delay(2);
+  display.clearDisplay();
+}
+void ChangeMode() {
   key = (encoderValue / 10) % 8;
   switch ( key % 4) {
-    case -3 : box_p = 16; break;
-    case -2 : box_p = 32; break;
-    case -1 : box_p = 48; break;
-    case 0 : box_p = 0; break;
-    case 1 : box_p = 16; break;
-    case 2 : box_p = 32; break;
-    case 3 : box_p = 48; break;
+    case -3 : rect_x_pos = 16; break;
+    case -2 : rect_x_pos = 32; break;
+    case -1 : rect_x_pos = 48; break;
+    case 0 : rect_x_pos = 0; break;
+    case 1 : rect_x_pos = 16; break;
+    case 2 : rect_x_pos = 32; break;
+    case 3 : rect_x_pos = 48; break;
   }
   if (key > 3) {
     page = 1;
