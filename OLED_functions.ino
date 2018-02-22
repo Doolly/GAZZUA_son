@@ -21,7 +21,21 @@ void OLEDInit () {
   CenterDisplay("GAZZUA_son");
   delay(2000);
 }
+void MainDisplay() {
+  display.drawRect(0, rect_x_pos, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
 
+  display.setCursor(5, 10);  
+  display.println(mode_s[page*4]);
+  display.setCursor(5, 27);  
+  display.println(mode_s[page*4 + 1]);
+  display.setCursor(5, 44);  
+  display.println(mode_s[page*4 + 2]);
+  display.setCursor(5, 60);  
+  display.println(mode_s[page*4 + 3]);
+  
+  display.display();
+  display.clearDisplay();
+}
 void CenterDisplay(String ment) {
   display.clearDisplay();
   display.setCursor(5, 32);
@@ -29,7 +43,7 @@ void CenterDisplay(String ment) {
   display.display();
 }
 
-void PrintValue(int variable) {
+void DisplayValue(int variable) {
   // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
   char string[10];  // Create a character array of 10 characters
   dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)

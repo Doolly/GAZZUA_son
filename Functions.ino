@@ -30,19 +30,23 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
 }
 
 void SerialMonitor() {
-  Serial.print("pressure_val = " + String(pressure_val) + "\n");
-  Serial.print("pressure_max = " + String(pressure_max) + "\n");
-  Serial.print("pressure_min = " + String(pressure_min) + "\n");
+  Serial.print(pressure_val_raw);
+  //Serial.print(" ");
+ // Serial.println(pressure_val);
+
+  //Serial.print("pressure_val = " + String(pressure_val) + "\n");
+  //Serial.print("pressure_max = " + String(pressure_max) + "\n");
+  //Serial.print("pressure_min = " + String(pressure_min) + "\n");
 }
 
 void Calibration () {
   CenterDisplay("Calibration");
-
-  pressure_max = GetSensor();
-  pressure_min = pressure_max - 50;
+  delay(1500);
+  pressure_max = pressure_val;
+  pressure_min = pressure_val - 50;
   unsigned long now = millis();
   while ( millis() < now + 4000 ) {
-    pressure_val = GetSensor();
+    GetSensor();
     delay(25);
     if ( pressure_val < pressure_min ) {
       pressure_min = pressure_val;
@@ -51,14 +55,21 @@ void Calibration () {
       pressure_max = pressure_val;
     }
   }
+  Serial.print("pressure_max = " + String(pressure_max) + "\n");
+  Serial.print("pressure_min = " + String(pressure_min) + "\n");
   CenterDisplay("done");
   delay(1000);
 }
-int GetSensor() {
-  pressure_val = analogRead(PRESS_SEN);
-  //Serial.print("pressure_val = " + String(pressure_val) + "\n");
 
-
+void GetSensor() {
+  int i;
+  int sum = 0;
+  for (i = 0; i < WINDOW_SIZE; i++) {
+    pressure_val_raw = analogRead(PRESS_SEN);
+    sensor_array[i] = pressure_val_raw;
+    sum += sensor_array[i];
+  }
+  pressure_val = sum / WINDOW_SIZE;
 }
 
 

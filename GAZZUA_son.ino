@@ -21,7 +21,7 @@
 
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
-#define WINDOW_SIZE 8
+#define WINDOW_SIZE 10
 #define NUMBER_OF_MODES 8
 /*------ Objects ------*/
 Adafruit_SSD1306 display;
@@ -38,6 +38,7 @@ void MotorInit();
 void ChangeMode();
 int DebounceRead(int button);
 void CenterDisplay(String ment);
+void DisplayValue(int variable);
 void Change_Value_in_Serial();
 void SerialMonitor();
 void Calibration ();
@@ -62,41 +63,29 @@ String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love"
 enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE ,FUCK, OTHER};
 enum MODE mode = GRASP;
 
+int pressure_val_raw = 0;
 int pressure_val = 0;
 int pressure_max;
 int pressure_min;
 int sensor_array[WINDOW_SIZE] = {0,};
-int encoder_gain = 30;
+int encoder_gain = 3;  //encoder sensitivity
 
 void setup() {
+  pinMode(LED_EN, OUTPUT);
+  Serial.begin(9600);
   EncoderInit();
   OLEDInit ();
   MotorInit();
-  pinMode(LED_EN, OUTPUT);
-  Serial.begin(9600);
-  
+
+ // Calibration ();
 }
 
 void loop() {
-
-
-  Calibration ();
-
   Change_Value_in_Serial();
+  SerialMonitor();
   ChangeMode();
-
-  display.drawRect(0, rect_x_pos, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
-
-  display.setCursor(5, 10);  
-  display.println(mode_s[page*4]);
-  display.setCursor(5, 27);  
-  display.println(mode_s[page*4 + 1]);
-  display.setCursor(5, 44);  
-  display.println(mode_s[page*4 + 2]);
-  display.setCursor(5, 60);  
-  display.println(mode_s[page*4 + 3]);
-  
-  display.display();
-  }
-
-
+  MainDisplay();
+  //GetSensor();
+  pressure_val_raw = analogRead(PRESS_SEN);
+ 
+}
