@@ -36,9 +36,10 @@ void OLEDInit();
 void MotorInit();
 void ChangeMode();
 int DebounceRead(int button);
+void CenterDisplay(String ment);
 void Change_Value_in_Serial();
 void SerialMonitor();
-
+void Calibration ();
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
@@ -77,11 +78,10 @@ void setup() {
 
 void loop() {
 
-
+  Calibration ();
   Change_Value_in_Serial();
   ChangeMode();
 
-  display.clearDisplay();
   display.drawRect(0, rect_x_pos, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
   if (page == 0) {
     display.setCursor(5, 10);  
@@ -104,6 +104,7 @@ void loop() {
     display.println("other");
   }
   display.display();
+  display.clearDisplay();
   
   
     if (key == 0) {

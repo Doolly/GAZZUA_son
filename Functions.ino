@@ -36,10 +36,7 @@ void SerialMonitor() {
 }
 
 void Calibration () {
-  display.clearDisplay();
-  display.setCursor(5, 10);  // (x,y)
-  display.println("Calibration mode");
-  display.display();
+  CenterDisplay("Calibration");
 
   pressure_max = GetSensor();
   pressure_min = pressure_max - 50;
@@ -53,14 +50,13 @@ void Calibration () {
     else if ( pressure_val > pressure_max ) {
       pressure_max = pressure_val;
     }
-
-
-
   }
+  CenterDisplay("done");
+  delay(1000);
 }
 int GetSensor() {
   pressure_val = analogRead(PRESS_SEN);
-  Serial.print("pressure_val = " + String(pressure_val) + "\n");
+  //Serial.print("pressure_val = " + String(pressure_val) + "\n");
 
 
 }

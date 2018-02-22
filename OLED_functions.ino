@@ -18,10 +18,24 @@ void OLEDInit () {
   display.setFont(&FreeMono9pt7b);  // Set a custom font
   display.setTextSize(0);  // Set text size. We are using a custom font so you should always use the text size of 0
 
-  display.setCursor(5, 32);  // (x,y)
-  display.println("GAZZUA_son");  // Text or value to print
-  display.display();  // Print everything we set previously
+  CenterDisplay("GAZZUA_son");
   delay(2000);
-  display.clearDisplay();
 }
 
+void CenterDisplay(String ment) {
+  display.clearDisplay();
+  display.setCursor(5, 32);
+  display.println(ment);
+  display.display();
+}
+
+void PrintValue(int variable) {
+  // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
+  char string[10];  // Create a character array of 10 characters
+  dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
+  display.setCursor(90, 10);  // (x,y)
+  display.println(variable);  // Text or value to print (key)
+  display.display();
+  delay(2);
+  display.clearDisplay();
+}

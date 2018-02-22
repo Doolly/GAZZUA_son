@@ -18,16 +18,7 @@ void UpdateEncoder() {
   lastEncoded = encoded; //store this value for next time
   
 }
-void PrintValue(int variable){
-  // Convert Variable1 into a string, so we can change the text alignment to the right AND It can be also used to add or remove decimal numbers.
-  char string[10];  // Create a character array of 10 characters
-  dtostrf(encoderValue, 3, 0, string);  // Convert float to a string: (<variable>,<amount of digits we are going to use>,<amount of decimal digits>,<string name>)
-  display.setCursor(90, 10);  // (x,y)
-  display.println(variable);  // Text or value to print (key)
-  display.display();
-  delay(2);
-  display.clearDisplay();
-}
+
 void ChangeMode() {
   key = (encoderValue / encoder_gain) % number_of_modes;
   switch ( key % 4) {
