@@ -10,13 +10,14 @@
 #define ENCODER_2 1
 #define I2C_SDA 2
 #define I2C_SCL 3
+#define LED_EN 4
+#define ENCODER_BUTTON A5
 #define M_THUMB 5
 #define M_INDEX 6
 #define M_MIDDLE 10
 #define M_OTHER 13
-#define LED_EN 4
-#define PRESS_1 A1
-#define ENCODER_BUTTON A5
+#define PRESS_SEN A1
+
 /*------ Value Define ------*/
 #define OLED_ADDR 0x3C
 #define array_size 8
@@ -35,15 +36,15 @@ void ButtonTest();
 int DebounceRead(int button);
 int CheckExit();
 void Change_Value_in_Serial();
-void Grasp();
-void Point();
-void V_Pos();
+void MotorInit();
+
 /*------ Global Variables ------*/
 volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
 long lastencoderValue = 0;
 int lastMSB = 0;
 int lastLSB = 0;
+
 int box_p = 0;
 int page = 0;
 int key = 0;
@@ -52,10 +53,12 @@ const int outThumbMax = 180;
 const int outThumbMin = 85;
 const int outIndexMax = 180;
 const int outIndexMin = 50;
+const int outMiddleMax = 180;
+const int outMiddleMin = 50;
 const int outOtherMax = 170;
 const int outOtherMin = 110;
 
-enum MODE {MENU = -1, GRASP, POINT, V_POS, OK, LED, THUMB, INDEX, OTHER};   //grasp(5) ,grasp(3) , picking,  LED  랜덤가위바위보(grasp(5),pick,nutral, 뻐큐)
+enum MODE {MENU = -1, GRASP, THREE, PICK, LED, RCP, FUCK, OTHER};   //grasp(5) ,grasp(3) , picking,  LED  랜덤가위바위보(grasp(5),pick,nutral, 뻐큐)
 enum MODE mode = MENU;
 
 int pressure_val = 0;
@@ -64,21 +67,16 @@ int sensor_array[array_size] = {0,};
 void setup() {
   EncoderInit();
   OLEDInit ();
-
-
-  Thumb_M.attach(M_THUMB);
-  Index_M.attach(M_INDEX);
-  Middle_M.attach(M_MIDDLE);
-  Other_M.attach(M_OTHER);
-
+  MotorInit();
+  pinMode(LED_EN, OUTPUT);
   Serial.begin(9600);
-  pinMode(LED_PWM, OUTPUT);
+  
 }
 
 void loop() {
   Change_Value_in_Serial();
   changeMode();
-  pressure_val = analogRead(PRESS_1);
+  pressure_val = analogRead(PRESS_SEN);
   Serial.println(pressure_val);
 
   display.drawRect(0, box_p, 70, 16, WHITE);  // Draw rectangle (x,y,width,height,color) 좌측상단부터 그림
