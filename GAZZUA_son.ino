@@ -63,9 +63,7 @@ const int OtherClose = 110;
 String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love", "Fxxx", "other"};
 enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE , FUCK, OTHER};
 enum MODE mode = GRASP;
-enum MODE pre_mode = GRASP;
-
-bool is_change = false;
+enum MODE last_mode = GRASP;
 
 int pressure_val_raw = 0;
 int pressure_val = 0;
@@ -87,6 +85,8 @@ int mm; // monitoring method
 
 void setup() {
   pinMode(LED_EN, OUTPUT);
+  digitalWrite(LED_EN, HIGH);
+  
   Serial.begin(9600);
   EncoderInit();
   OLEDInit ();
@@ -99,20 +99,8 @@ void loop() {
   Change_Value_in_Serial();
   SerialMonitor(mm);
   ChangeMode();
-  if (pre_mode != mode) {
-    Thumb_M.write(ThumbOpen);
-    Index_M.write(IndexOpen);
-    Middle_M.write(MiddleOpen);
-    Other_M.write(OtherOpen);
-    digitalWrite(LED_EN, LOW);
-    is_change = true;
-  }
   MainDisplay();
   GetSensor();
   Sensor2Angle();
-  if(is_change){
-    MotorCtrl();
-    is_change = false;
-  }
-  pre_mode = mode;
+ 
 }

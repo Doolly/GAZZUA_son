@@ -40,6 +40,7 @@ void SerialMonitor(int how) {
     Serial.print("pressure_val = " + String(pressure_val) + "\n");
     Serial.print("pressure_max = " + String(pressure_max) + "\n");
     Serial.print("pressure_min = " + String(pressure_min) + "\n");
+    Serial.print("mode = " + String(mode) + "\n");
     Serial.print("\n");
   }
 }
