@@ -112,6 +112,7 @@ void loop() {
   Sensor2Angle();
   if(is_change){
     MotorCtrl();
+    is_change = false;
   }
   pre_mode = mode;
 }
