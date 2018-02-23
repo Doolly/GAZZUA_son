@@ -75,7 +75,18 @@ void GetSensor() {
     sum += sensor_array[i];
   }
   pressure_val = sum / WINDOW_SIZE;
+  constrain(pressure_val, pressure_min, pressure_max);
 }
+
+void Sensor2Angle() {
+  thumb_pos = map(pressure_val, pressure_min, pressure_max, ThumbOpen, ThumbClose);
+  index_pos = map(pressure_val, pressure_min, pressure_max, IndexOpen, IndexClose);
+  middle_pos = map(pressure_val, pressure_min, pressure_max, MiddleOpen, MiddleClose);
+  other_pos = map(pressure_val, pressure_min, pressure_max, OtherOpen, OtherClose);
+
+}
+
+
 
 
 

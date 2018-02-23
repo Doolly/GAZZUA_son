@@ -13,10 +13,10 @@
 #define I2C_SCL 3
 #define ENCODER_BUTTON 4
 #define LED_EN 7
-#define M_THUMB 5
-#define M_INDEX 6
-#define M_MIDDLE 11
-#define M_OTHER 13
+#define M_THUMB 13   //open100 close 10
+#define M_INDEX 5  // close 150 open 0
+#define M_MIDDLE 11 //
+#define M_OTHER 6 // open10 close
 #define PRESS_SEN A1
 
 /*------ Value Define ------*/
@@ -35,11 +35,13 @@ Servo Other_M;
 void EncoderInit();
 void UpdateEncoder();
 void OLEDInit();
-void MotorInit();
-void ChangeMode();
-int DebounceRead(int button);
+void MainDisplay();
 void CenterDisplay(String ment);
 void DisplayValue(int variable);
+void MotorInit();
+void MotorCtrl();
+void ChangeMode();
+int DebounceRead(int button);
 void Change_Value_in_Serial();
 void SerialMonitor(int how);
 void Calibration ();
@@ -49,14 +51,14 @@ volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
 int encoder_gain = 4;  //encoder sensitivity
 
-const int ThumbMax = 100;
-const int ThumbMin = 10;
-const int IndexMax = 180;
-const int IndexMin = 50;
-const int MiddleMax = 180;
-const int MiddleMin = 50;
-const int OtherMax = 170;
-const int OtherMin = 110;
+const int ThumbOpen = 100;
+const int ThumbClose = 10;
+const int IndexOpen = 150;
+const int IndexClose = 0;
+const int MiddleOpen = 180;
+const int MiddleClose = 50;
+const int OtherOpen = 170;
+const int OtherClose = 110;
 
 String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love", "Fxxx", "other"};
 enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE , FUCK, OTHER};
@@ -66,7 +68,13 @@ int pressure_val_raw = 0;
 int pressure_val = 0;
 int pressure_max;
 int pressure_min;
+int pressure_rate;
 int sensor_array[WINDOW_SIZE] = {0,};
+
+int thumb_pos;
+int index_pos;
+int middle_pos;
+int other_pos;
 
 int rect_x_pos = 0;
 int page = 0;
@@ -81,7 +89,7 @@ void setup() {
   OLEDInit ();
   MotorInit();
 
- // Calibration ();
+  // Calibration ();
 }
 
 void loop() {
@@ -90,5 +98,6 @@ void loop() {
   ChangeMode();
   MainDisplay();
   GetSensor();
+  Sensor2Angle();
 
 }
