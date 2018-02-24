@@ -41,6 +41,12 @@ void SerialMonitor(int how) {
     Serial.print("pressure_max = " + String(pressure_max) + "\n");
     Serial.print("pressure_min = " + String(pressure_min) + "\n");
     Serial.print("mode = " + String(mode) + "\n");
+    Serial.print("temp_mode = " + String(temp_mode) + "\n");
+    
+    Serial.print("last_mode = " + String(last_mode) + "\n");
+    
+    Serial.print("thumb_pos = " + String(thumb_pos) + "\n");
+
     Serial.print("\n");
   }
 }
@@ -48,10 +54,10 @@ void SerialMonitor(int how) {
 void Calibration () {
   CenterDisplay("Calibration");
   delay(1500);
-  pressure_max = pressure_val;
-  pressure_min = pressure_val - 50;
+  pressure_max = pressure_val + 5;
+  pressure_min = pressure_val;
   unsigned long now = millis();
-  while ( millis() < now + 4000 ) {
+  while ( millis() < now + 5000 ) {
     GetSensor();
     delay(25);
     if ( pressure_val < pressure_min ) {
@@ -76,14 +82,17 @@ void GetSensor() {
     sum += sensor_array[i];
   }
   pressure_val = sum / WINDOW_SIZE;
-  constrain(pressure_val, pressure_min, pressure_max);
 }
 
 void Sensor2Angle() {
   thumb_pos = map(pressure_val, pressure_min, pressure_max, ThumbOpen, ThumbClose);
+  thumb_pos_rate = map(thumb_pos, ThumbOpen, ThumbClose, 0, 100);
   index_pos = map(pressure_val, pressure_min, pressure_max, IndexOpen, IndexClose);
+  index_pos_rate = map(index_pos, IndexOpen, IndexClose, 0, 100);
   middle_pos = map(pressure_val, pressure_min, pressure_max, MiddleOpen, MiddleClose);
+  middle_pos_rate = map(middle_pos, MiddleOpen, MiddleClose, 0, 100);
   other_pos = map(pressure_val, pressure_min, pressure_max, OtherOpen, OtherClose);
+  other_pos_rate = map(other_pos, OtherOpen, OtherClose, 0, 100);
 
 }
 
