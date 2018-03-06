@@ -17,30 +17,37 @@ void UpdateEncoder() {
     encoderValue --;
   lastEncoded = encoded; //store this value for next time
 
-  if(encoderValue < 0)
+  if (encoderValue < 0)
     encoderValue = 999;
+
+  ChangeMode();
 }
 
 void ChangeMode() {
   key = (encoderValue * encoder_gain / 100) % NUMBER_OF_MODES;
   switch (key) {
-    case 0 : mode = GRASP;break;
-    case 1 : mode = THREE;break;
-    case 2 : mode = PICK;break;
-    case 3 : mode = LED;break;
-    case 4 : mode = RCP;break;
-    case 5 : mode = LOVE;break;
-    case 6 : mode = FUCK;break;
-    case 7 : mode = OTHER;break;
-    }
+    case 0 : temp_mode = GRASP; break;
+    case 1 : temp_mode = THREE; break;
+    case 2 : temp_mode = PICK; break;
+    case 3 : temp_mode = LED; break;
+    case 4 : temp_mode = RCP; break;
+    case 5 : temp_mode = LOVE; break;
+    case 6 : temp_mode = FUCK; break;
+    case 7 : temp_mode = OTHER; break;
+  }
   if (key > 3) {
     page = 1;
-    rect_x_pos = (key-4)*16;
+    rect_x_pos = (key - 4) * 16;
   }
   else {
     page = 0;
-    rect_x_pos = key*16;
+    rect_x_pos = key * 16;
   }
+
+  if (key != last_key) {
+    last_mode_change_time = millis();
+  }
+  last_key=key;
 }
 
 

@@ -26,26 +26,24 @@ void Change_Value_in_Serial() { //new line   ex) A_variable 124
     else
       command += c;
   }
-
 }
 
 void SerialMonitor(int how) {
-
   if  (how == 0) { //for plot
-    Serial.print(pressure_val_raw);
+    Serial.print(pressure_rate);
     Serial.print(" ");
-    Serial.println(pressure_val);
+    Serial.print(thumb_pos);
+    Serial.print(" ");
+    Serial.println(index_pos);
   }
   else if (how == 1) { //for value print
-    Serial.print("pressure_val = " + String(pressure_val) + "\n");
-    Serial.print("pressure_max = " + String(pressure_max) + "\n");
-    Serial.print("pressure_min = " + String(pressure_min) + "\n");
+    //    Serial.print("pressure_val = " + String(pressure_val) + "\n");
+    //    Serial.print("pressure_max = " + String(pressure_max) + "\n");
+    //    Serial.print("pressure_min = " + String(pressure_min) + "\n");
     Serial.print("mode = " + String(mode) + "\n");
     Serial.print("temp_mode = " + String(temp_mode) + "\n");
-    
     Serial.print("last_mode = " + String(last_mode) + "\n");
-    
-    Serial.print("thumb_pos = " + String(thumb_pos) + "\n");
+    Serial.print("last_mode_change_time = " + String(last_mode_change_time) + "\n");
 
     Serial.print("\n");
   }
@@ -57,9 +55,8 @@ void Calibration () {
   pressure_max = pressure_val + 5;
   pressure_min = pressure_val;
   unsigned long now = millis();
-  while ( millis() < now + 5000 ) {
+  while ( millis() < now + 4000 ) {
     GetSensor();
-    delay(25);
     if ( pressure_val < pressure_min ) {
       pressure_min = pressure_val;
     }
@@ -85,14 +82,18 @@ void GetSensor() {
 }
 
 void Sensor2Angle() {
-  thumb_pos = map(pressure_val, pressure_min, pressure_max, ThumbOpen, ThumbClose);
-  thumb_pos_rate = map(thumb_pos, ThumbOpen, ThumbClose, 0, 100);
-  index_pos = map(pressure_val, pressure_min, pressure_max, IndexOpen, IndexClose);
-  index_pos_rate = map(index_pos, IndexOpen, IndexClose, 0, 100);
-  middle_pos = map(pressure_val, pressure_min, pressure_max, MiddleOpen, MiddleClose);
-  middle_pos_rate = map(middle_pos, MiddleOpen, MiddleClose, 0, 100);
-  other_pos = map(pressure_val, pressure_min, pressure_max, OtherOpen, OtherClose);
-  other_pos_rate = map(other_pos, OtherOpen, OtherClose, 0, 100);
+  pressure_val = constrain(pressure_val, pressure_min, pressure_max);
+  pressure_rate = map(pressure_val, pressure_min, pressure_max, 0, 100);
+
+  thumb_pos = map(pressure_rate, pressure_min, pressure_max, ThumbOpen, ThumbClose);
+  index_pos = map(pressure_rate, pressure_min, pressure_max, IndexOpen, IndexClose);
+  middle_pos = map(pressure_rate, pressure_min, pressure_max, MiddleOpen, MiddleClose);
+  other_pos = map(pressure_rate, pressure_min, pressure_max, OtherOpen, OtherClose);
+
+  //  thumb_pos_rate = map(thumb_pos, ThumbOpen, ThumbClose, 0, 100);
+  //  index_pos_rate = map(index_pos, IndexOpen, IndexClose, 0, 100);
+  //  middle_pos_rate = map(middle_pos, MiddleOpen, MiddleClose, 0, 100);
+  //  other_pos_rate = map(other_pos, OtherOpen, OtherClose, 0, 100);
 
 }
 
