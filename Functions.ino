@@ -32,18 +32,16 @@ void SerialMonitor(int how) {
   if  (how == 0) { //for plot
     Serial.print(pressure_rate);
     Serial.print(" ");
-    Serial.print(thumb_pos);
-    Serial.print(" ");
-    Serial.println(index_pos);
+    Serial.println(pressure_val_raw);
   }
   else if (how == 1) { //for value print
-    //    Serial.print("pressure_val = " + String(pressure_val) + "\n");
-    //    Serial.print("pressure_max = " + String(pressure_max) + "\n");
-    //    Serial.print("pressure_min = " + String(pressure_min) + "\n");
-    Serial.print("mode = " + String(mode) + "\n");
-    Serial.print("temp_mode = " + String(temp_mode) + "\n");
-    Serial.print("last_mode = " + String(last_mode) + "\n");
-    Serial.print("last_mode_change_time = " + String(last_mode_change_time) + "\n");
+        Serial.print("pressure_val = " + String(pressure_val) + "\n");
+        Serial.print("pressure_max = " + String(pressure_max) + "\n");
+        Serial.print("middle_pos = " + String(middle_pos) + "\n");
+//    Serial.print("mode = " + String(mode) + "\n");
+//    Serial.print("temp_mode = " + String(temp_mode) + "\n");
+//    Serial.print("last_mode = " + String(last_mode) + "\n");
+//    Serial.print("last_mode_change_time = " + String(last_mode_change_time) + "\n");
 
     Serial.print("\n");
   }
@@ -85,16 +83,10 @@ void Sensor2Angle() {
   pressure_val = constrain(pressure_val, pressure_min, pressure_max);
   pressure_rate = map(pressure_val, pressure_min, pressure_max, 0, 100);
 
-  thumb_pos = map(pressure_rate, pressure_min, pressure_max, ThumbOpen, ThumbClose);
-  index_pos = map(pressure_rate, pressure_min, pressure_max, IndexOpen, IndexClose);
-  middle_pos = map(pressure_rate, pressure_min, pressure_max, MiddleOpen, MiddleClose);
-  other_pos = map(pressure_rate, pressure_min, pressure_max, OtherOpen, OtherClose);
-
-  //  thumb_pos_rate = map(thumb_pos, ThumbOpen, ThumbClose, 0, 100);
-  //  index_pos_rate = map(index_pos, IndexOpen, IndexClose, 0, 100);
-  //  middle_pos_rate = map(middle_pos, MiddleOpen, MiddleClose, 0, 100);
-  //  other_pos_rate = map(other_pos, OtherOpen, OtherClose, 0, 100);
-
+  thumb_pos = map(pressure_rate, 0, 100, ThumbOpen, ThumbClose);
+  index_pos = map(pressure_rate, 0, 100, IndexOpen, IndexClose);
+  middle_pos = map(pressure_rate, 0, 100, MiddleOpen, MiddleClose);
+  other_pos = map(pressure_rate, 0, 100, OtherOpen, OtherClose);
 }
 
 

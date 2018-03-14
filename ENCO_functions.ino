@@ -31,9 +31,9 @@ void ChangeMode() {
     case 2 : temp_mode = PICK; break;
     case 3 : temp_mode = LED; break;
     case 4 : temp_mode = RCP; break;
-    case 5 : temp_mode = LOVE; break;
-    case 6 : temp_mode = FUCK; break;
-    case 7 : temp_mode = OTHER; break;
+    case 5 : temp_mode = FUCK; break;
+    case 6 : temp_mode = THUMBUP; break;
+    case 7 : temp_mode = POINT; break;
   }
   if (key > 3) {
     page = 1;

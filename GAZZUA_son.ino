@@ -51,27 +51,17 @@ volatile int lastEncoded = 0;
 volatile long encoderValue = 0;
 int encoder_gain = 4;  //encoder sensitivity
 
-//const int ThumbOpen = 100;
-//const int ThumbClose = 5;
-//const int IndexOpen = 120;
-//const int IndexClose = 0;
-//const int MiddleOpen = 50;
-//const int MiddleClose = 0;
-//const int OtherOpen = 170;
-//const int OtherClose = 80;
-
-
 const int ThumbOpen = 90;
 const int ThumbClose = 5;
 const int IndexOpen = 110;
 const int IndexClose = 0;
-const int MiddleOpen = 40;
-const int MiddleClose = 0;
-const int OtherOpen = 160;
-const int OtherClose = 80;
+const int MiddleOpen = 75;
+const int MiddleClose = 20;
+const int OtherOpen = 150;
+const int OtherClose = 90;
 
-String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "love", "Fxxx", "other"};
-enum MODE {GRASP, THREE, PICK, LED, RCP, LOVE , FUCK, OTHER};
+String mode_s[NUMBER_OF_MODES] = {"grasp", "three", "pick", "LED", "rcp", "Fxxx", "thumb", "point"};
+enum MODE {GRASP, THREE, PICK, LED, RCP, FUCK , THUMBUP, POINT};
 enum MODE mode = GRASP;
 enum MODE last_mode = GRASP;
 enum MODE temp_mode = GRASP;
@@ -104,23 +94,24 @@ int mm = 1; // monitoring method
 
 void setup() {
   pinMode(LED_EN, OUTPUT);
-  digitalWrite(LED_EN, HIGH);
+  digitalWrite(LED_EN, LOW);
 
   Serial.begin(9600);
   EncoderInit();
   OLEDInit ();
-  //MotorInit();
+  MotorInit();
 
-  //Calibration ();
+  Calibration ();
 }
 
 void loop() {
-  Change_Value_in_Serial();
-  SerialMonitor(mm);
+  //Change_Value_in_Serial();
+  //SerialMonitor(mm);
   MainDisplay();
   GetSensor();
   Sensor2Angle();
   MotorCtrl ();
+  delay(1);
 
   if (temp_mode != last_mode) {
     while (1) {
